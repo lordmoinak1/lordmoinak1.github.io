@@ -91,9 +91,9 @@ nav .container{display:flex;justify-content:space-between;align-items:center;pad
 
 /* Hero */
 .hero{padding:8.5rem 0 4.5rem;border-bottom:1px solid var(--border);}
-.hero-grid{display:grid;grid-template-columns:1fr 300px;gap:3.5rem;align-items:center;}
+.hero-grid{display:grid;grid-template-columns:1fr 260px;gap:2.5rem;align-items:center;}
 .hero .eyebrow{margin-bottom:1rem;}
-h1.name{font-size:clamp(2.1rem,6vw,3.9rem);font-weight:600;letter-spacing:-0.02em;margin-bottom:.7rem;color:var(--ink);}
+h1.name{font-size:clamp(2rem,4.4vw,3rem);font-weight:600;letter-spacing:-0.02em;margin-bottom:.7rem;color:var(--ink);}
 .positions{font-size:1.06rem;color:var(--ink-soft);margin-bottom:1.5rem;line-height:1.5;}
 .positions .sep{color:var(--border-strong);margin:0 .1rem;}
 .positions strong{font-weight:600;color:var(--ink);}
@@ -137,7 +137,6 @@ section.alt{background:rgba(238,232,218,0.62);}
 }
 .section-title{font-size:clamp(1.7rem,3.4vw,2.25rem);font-weight:500;margin-bottom:.4rem;}
 .section-head{margin-bottom:2.6rem;max-width:640px;}
-.section-sub{color:var(--muted);font-size:1.02rem;}
 
 /* About */
 .about-text{font-size:1.12rem;color:var(--ink-soft);max-width:760px;line-height:1.8;}
@@ -179,9 +178,7 @@ section.alt{background:rgba(238,232,218,0.62);}
 .research-num{font-family:var(--serif);font-size:1.5rem;color:var(--accent);font-weight:500;margin-bottom:.7rem;line-height:1;}
 .research-card h3{font-size:1.24rem;font-weight:600;margin-bottom:.7rem;line-height:1.28;}
 .research-card p{color:var(--body);font-size:.98rem;margin-bottom:1.1rem;}
-.research-link{font-size:.9rem;font-weight:600;color:var(--accent);margin-top:auto;display:inline-flex;gap:.35rem;align-items:center;}
-.research-card:hover .research-link{gap:.6rem;}
-.venues{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--border);}
+.venues{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:auto;padding-top:1.1rem;border-top:1px solid var(--border);}
 .venue{padding:.22rem .6rem;border-radius:6px;background:var(--accent-tint);color:var(--accent);font-size:.75rem;font-weight:600;letter-spacing:.02em;}
 
 /* Activities */
@@ -257,7 +254,7 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
 <header class="hero" id="top">
     <div class="container hero-grid">
         <div>
-            <span class="eyebrow">Medical AI · Neuro-oncology · Medical Imaging</span>
+            <span class="eyebrow">Artificial Intelligence · Neuro-Radiology · Medical Image Analysis</span>
             <h1 class="name">Moinak Bhattacharya, Ph.D.</h1>
             <p class="positions">
                 <strong>Postdoctoral Research Scientist</strong>, Columbia University Irving Medical Center
@@ -298,7 +295,6 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
 <section id="news" class="alt">
     <div class="container">
         <div class="section-head reveal">
-            <span class="eyebrow">Latest</span>
             <h2 class="section-title">News</h2>
         </div>
         <div class="news-list reveal">
@@ -336,29 +332,22 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
         <div class="section-head reveal">
             <span class="eyebrow">Research</span>
             <h2 class="section-title">Selected projects</h2>
-            <p class="section-sub">Each project links to the corresponding publication on Google Scholar.</p>
         </div>
         <div class="card-grid">
             <a class="research-card reveal" href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=ejucgiUAAAAJ&citation_for_view=ejucgiUAAAAJ:d1gkVwhDpl0C" target="_blank" rel="noopener">
                 <div class="research-num">01</div>
                 <h3>Topological biomarkers for immunotherapy response prediction</h3>
-                <p>Topology-driven biomarkers and AI frameworks for predicting immunotherapy response from cancer imaging.</p>
-                <span class="research-link">View publication →</span>
-                <div class="venues"><span class="venue">ITCR '24</span><span class="venue">ITCR '25</span></div>
+                <p>Topology-driven biomarkers and AI frameworks for predicting immunotherapy response from cancer imaging.</p>                <div class="venues"><span class="venue">ITCR '24</span><span class="venue">ITCR '25</span></div>
             </a>
             <a class="research-card reveal" href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=ejucgiUAAAAJ&citation_for_view=ejucgiUAAAAJ:u-x6o8ySG0sC" target="_blank" rel="noopener">
                 <div class="research-num">02</div>
                 <h3>Generative AI &amp; foundation models for molecular marker prediction in adult glioma <span class="badge-new">New</span></h3>
-                <p>Multimodal generative and foundation-model approaches for molecular marker prediction in precision neuro-oncology.</p>
-                <span class="research-link">View publication →</span>
-                <div class="venues"><span class="venue">ASNR '25</span><span class="venue">RSNA '25</span></div>
+                <p>Multimodal generative and foundation-model approaches for molecular marker prediction in precision neuro-oncology.</p>                <div class="venues"><span class="venue">ASNR '25</span><span class="venue">RSNA '25</span></div>
             </a>
             <a class="research-card reveal" href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=ejucgiUAAAAJ&citation_for_view=ejucgiUAAAAJ:W7OEmFMy1HYC" target="_blank" rel="noopener">
                 <div class="research-num">03</div>
                 <h3>Radiologists' eye-gaze patterns improve disease diagnoses</h3>
-                <p>Eye-tracking-guided learning and human–AI collaboration for interpretable diagnostic systems in radiology.</p>
-                <span class="research-link">View publication →</span>
-                <div class="venues"><span class="venue">ECCV '22</span><span class="venue">MICCAI '22</span><span class="venue">MIDL '24</span></div>
+                <p>Eye-tracking-guided learning and human–AI collaboration for interpretable diagnostic systems in radiology.</p>                <div class="venues"><span class="venue">ECCV '22</span><span class="venue">MICCAI '22</span><span class="venue">MIDL '24</span></div>
             </a>
         </div>
     </div>
