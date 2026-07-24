@@ -200,12 +200,6 @@ section.alt{background:rgba(238,232,218,0.62);}
 #contact{text-align:center;border-bottom:none;}
 #contact .section-head{margin-inline:auto;}
 .contact-lead{color:var(--body);font-size:1.08rem;max-width:520px;margin:0 auto 1.8rem;}
-.contact-email{
-    display:inline-flex;align-items:center;gap:.6rem;font-family:var(--serif);
-    font-size:1.3rem;color:var(--ink);margin-bottom:2rem;font-weight:500;
-}
-.contact-email svg{width:20px;height:20px;color:var(--accent);}
-.contact-email:hover{color:var(--accent);}
 #contact .socials{justify-content:center;}
 
 /* Footer */
@@ -276,6 +270,9 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
             <div class="hero-actions">
                 <a href="#research" class="btn primary">Explore Research</a>
                 <div class="socials">
+                    <a class="email-link" href="#" aria-label="Email" title="Email">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5a1 1 0 0 0-1 1v.51l10 5.49 10-5.49V6a1 1 0 0 0-1-1H3zm19 3.79-9.52 5.23a1 1 0 0 1-.96 0L2 8.79V18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8.79z"/></svg>
+                    </a>
                     <a href="https://scholar.google.com/citations?user=ejucgiUAAAAJ&hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5 12 0z"/></svg>
                     </a>
@@ -375,11 +372,10 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
             <h2 class="section-title">Contact</h2>
         </div>
         <p class="contact-lead reveal">Interested in collaborating on medical AI, or have a question about my research? I'd be glad to hear from you.</p>
-        <a class="contact-email reveal" id="emailLink" href="#" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
-            <span id="emailText">moinak[dot]bhattacharya[at]stonybrook.edu</span>
-        </a>
         <div class="socials reveal">
+            <a class="email-link" href="#" aria-label="Email" title="Email">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5a1 1 0 0 0-1 1v.51l10 5.49 10-5.49V6a1 1 0 0 0-1-1H3zm19 3.79-9.52 5.23a1 1 0 0 1-.96 0L2 8.79V18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8.79z"/></svg>
+            </a>
             <a href="https://scholar.google.com/citations?user=ejucgiUAAAAJ&hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5 12 0z"/></svg>
             </a>
@@ -404,11 +400,12 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
 </footer>
 
 <script>
-// Assemble email to lightly deter scrapers
+// Assemble email (mailto on the envelope icons) to lightly deter scrapers
 (function(){
-    var u="moinak.bhattacharya", d="stonybrook.edu";
-    var link=document.getElementById("emailLink"), txt=document.getElementById("emailText");
-    if(link){link.href="mailto:"+u+"@"+d; txt.textContent=u+"@"+d;}
+    var u="moinak.bhattacharya", d="stonybrook.edu", mail="mailto:"+u+"@"+d;
+    document.querySelectorAll("a.email-link").forEach(function(a){
+        a.href=mail; a.title=u+"@"+d;
+    });
 })();
 
 // Mobile menu
