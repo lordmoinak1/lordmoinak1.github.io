@@ -99,17 +99,6 @@ h1.name{font-size:clamp(2rem,4.4vw,3rem);font-weight:600;letter-spacing:-0.02em;
 .positions strong{font-weight:600;color:var(--ink);}
 .bio{font-size:1.08rem;color:var(--body);max-width:600px;margin-bottom:2rem;}
 .hero-actions{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
-.btn{
-    display:inline-flex;align-items:center;gap:.5rem;
-    padding:.6rem 1.15rem;border-radius:8px;
-    font-size:.95rem;font-weight:500;font-family:var(--sans);
-    border:1px solid transparent;transition:all .22s;cursor:pointer;
-}
-.btn.primary{background:var(--accent);color:#fff;}
-.btn.primary:hover{background:var(--accent-hover);color:#fff;}
-.btn.ghost{background:transparent;border-color:var(--border-strong);color:var(--ink);}
-.btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
-
 .socials{display:flex;gap:.55rem;align-items:center;}
 .socials a{
     display:grid;place-items:center;width:40px;height:40px;border-radius:8px;
@@ -196,7 +185,7 @@ section.alt{background:rgba(238,232,218,0.62);}
 /* Contact */
 #contact{text-align:center;border-bottom:none;}
 #contact .section-head{margin-inline:auto;}
-.contact-lead{color:var(--body);font-size:1.08rem;max-width:520px;margin:0 auto 1.8rem;}
+.contact-addr{margin-top:1.8rem;font-family:var(--serif);font-size:1.15rem;color:var(--ink-soft);letter-spacing:.01em;}
 #contact .socials{justify-content:center;}
 
 /* Footer */
@@ -265,7 +254,6 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
                 collaboration for neuro-oncology and radiology.
             </p>
             <div class="hero-actions">
-                <a href="#research" class="btn primary">Explore Research</a>
                 <div class="socials">
                     <a class="email-link" href="#" aria-label="Email" title="Email">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5a1 1 0 0 0-1 1v.51l10 5.49 10-5.49V6a1 1 0 0 0-1-1H3zm19 3.79-9.52 5.23a1 1 0 0 1-.96 0L2 8.79V18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8.79z"/></svg>
@@ -299,28 +287,20 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
         </div>
         <div class="news-list reveal">
             <div class="news-item">
-                <div class="news-date">2026</div>
-                <div class="news-body"><strong>5 papers accepted at SPIE 2026.</strong><span class="badge-new">New</span><br>Congratulations Maya Balakumaran (JHU) and Angelica P. Kurtz (CUIMC)!</div>
+                <div class="news-date">Jul 2026</div>
+                <div class="news-body"><strong>3 abstracts (1 oral and 2 posters) accepted at RSNA 2026.</strong><span class="badge-new">New</span></div>
             </div>
             <div class="news-item">
-                <div class="news-date">2025</div>
-                <div class="news-body"><strong>2 Scientific Abstracts &amp; 2 Educational Exhibits accepted at RSNA 2025.</strong><span class="badge-new">New</span><br>Congratulations Annie Singh, Fatima A. Qureshy, and Angelica P. Kurtz!</div>
+                <div class="news-date">Mar 2026</div>
+                <div class="news-body"><strong>1 abstract and 1 Educational Exhibit accepted at ASNR 2026.</strong><span class="badge-new">New</span></div>
             </div>
             <div class="news-item">
-                <div class="news-date">Jul 2025</div>
-                <div class="news-body">Named among the <strong>Top 12 presenters</strong> at the SBM Cancer Center Symposium.</div>
+                <div class="news-date">Feb 2026</div>
+                <div class="news-body"><strong>GazeLT accepted at MELBA.</strong><span class="badge-new">New</span></div>
             </div>
             <div class="news-item">
-                <div class="news-date">Jun 2025</div>
-                <div class="news-body">Received the <strong>Best Session Talk Award</strong> at the NIH NCI ITCR Trainee Symposium.</div>
-            </div>
-            <div class="news-item">
-                <div class="news-date">May 2025</div>
-                <div class="news-body"><strong>Winner</strong> at the Gloria &amp; Mark Snyder Symposium.</div>
-            </div>
-            <div class="news-item">
-                <div class="news-date">2025</div>
-                <div class="news-body">Presented my work at <strong>NYC Computer Vision Day</strong>.</div>
+                <div class="news-date">Feb 2026</div>
+                <div class="news-body"><strong>5 papers accepted at SPIE 2026.</strong><br>Congratulations Maya Balakumaran (JHU) and Angelica P. Kurtz (CUIMC)!</div>
             </div>
         </div>
     </div>
@@ -359,9 +339,7 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
         <div class="section-head reveal">
             <span class="eyebrow">Get in touch</span>
             <h2 class="section-title">Contact</h2>
-        </div>
-        <p class="contact-lead reveal">Interested in collaborating on medical AI, or have a question about my research? I'd be glad to hear from you.</p>
-        <div class="socials reveal">
+        </div>        <div class="socials reveal">
             <a class="email-link" href="#" aria-label="Email" title="Email">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5a1 1 0 0 0-1 1v.51l10 5.49 10-5.49V6a1 1 0 0 0-1-1H3zm19 3.79-9.52 5.23a1 1 0 0 1-.96 0L2 8.79V18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8.79z"/></svg>
             </a>
@@ -378,6 +356,7 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
             </a>
         </div>
+        <p class="contact-addr reveal">mb5532 AT cumc.columbia.edu</p>
     </div>
 </section>
 
@@ -391,7 +370,7 @@ footer .fine{margin-top:.4rem;font-size:.82rem;}
 <script>
 // Assemble email (mailto on the envelope icons) to lightly deter scrapers
 (function(){
-    var u="moinak.bhattacharya", d="stonybrook.edu", mail="mailto:"+u+"@"+d;
+    var u="mb5532", d="cumc.columbia.edu", mail="mailto:"+u+"@"+d;
     document.querySelectorAll("a.email-link").forEach(function(a){
         a.href=mail; a.title=u+"@"+d;
     });
