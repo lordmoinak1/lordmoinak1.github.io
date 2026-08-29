@@ -402,10 +402,31 @@ var y=document.getElementById("year"); if(y){ y.textContent=(new Date()).getFull
     var ctx=canvas.getContext("2d");
     var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches;
     var DPR=Math.min(window.devicePixelRatio||1, 2);
-    var ACC="51,84,124";            // ink-blue accent
-    var W=0,H=0,nodes=[],pulses=[],linkDist=150,raf=null,running=false;
+    var ACC="51,84,124";            // ink-blue accent — resting synapses / somas
+    var FIRE="70,150,224";          // bright azure — action potential / firing flash
+    var W=0,H=0,nodes=[],pulses=[],firings=[],linkDist=150,raf=null,running=false;
 
     function rand(a,b){return a+Math.random()*(b-a);}
+
+    // procedurally grow a small dendritic arbor in coordinates local to a soma —
+    // a handful of branches forking once or twice, like a real neuron's tree
+    function growBranch(out, x,y, ang, len, depth, width){
+        var x2=x+Math.cos(ang)*len, y2=y+Math.sin(ang)*len;
+        out.push({x1:x,y1:y,x2:x2,y2:y2});
+        if(depth<=0) return;
+        var children=Math.random()<0.55?2:1;
+        for(var c=0;c<children;c++){
+            var da=rand(0.4,1.0)*(c===0?-1:1)*(Math.random()<0.5?1:0.6);
+            growBranch(out, x2,y2, ang+da, len*rand(0.55,0.72), depth-1, width);
+        }
+    }
+    function genDendrites(){
+        var out=[], roots=3+((Math.random()*3)|0);
+        for(var i=0;i<roots;i++){
+            growBranch(out, 0,0, Math.random()*6.2832, rand(8,15), 2, 1);
+        }
+        return out;
+    }
 
     function resize(){
         W=canvas.clientWidth; H=canvas.clientHeight;
@@ -416,10 +437,13 @@ var y=document.getElementById("year"); if(y){ y.textContent=(new Date()).getFull
         linkDist=Math.max(110, Math.min(180, W/8));
         nodes=[];
         for(var i=0;i<count;i++){
-            nodes.push({x:Math.random()*W, y:Math.random()*H,
-                        vx:rand(-0.11,0.11), vy:rand(-0.11,0.11), r:rand(1.1,2.4)});
+            nodes.push({id:i, x:Math.random()*W, y:Math.random()*H,
+                        vx:rand(-0.09,0.09), vy:rand(-0.09,0.09), r:rand(1.6,3),
+                        pot:Math.random()*0.6, rate:rand(0.0015,0.0055), refr:0,
+                        dendrites:genDendrites()});
         }
         pulses=[];
+        firings=[];
     }
 
     function neighbors(a){
@@ -430,6 +454,36 @@ var y=document.getElementById("year"); if(y){ y.textContent=(new Date()).getFull
             if(dx*dx+dy*dy < linkDist*linkDist) out.push(b);
         }
         return out;
+    }
+
+    // deterministic small perpendicular bow for a pair, so synapses read as
+    // organic curved axons/dendrites rather than straight wires
+    function bow(a,b,d){
+        var h=Math.sin(a.id*12.9898+b.id*78.233)*43758.5453; h-=Math.floor(h);
+        return (h*2-1)*Math.min(26,d*0.32);
+    }
+    function ctrlPoint(a,b,d){
+        var dx=b.x-a.x, dy=b.y-a.y;
+        var px=-dy/(d||1), py=dx/(d||1), off=bow(a,b,d);
+        return {x:(a.x+b.x)/2+px*off, y:(a.y+b.y)/2+py*off};
+    }
+    function quadPoint(a,c,b,t){
+        var mt=1-t;
+        return {x:mt*mt*a.x+2*mt*t*c.x+t*t*b.x, y:mt*mt*a.y+2*mt*t*c.y+t*t*b.y};
+    }
+
+    function fire(n, depth){
+        n.pot=0; n.refr=rand(28,58);
+        if(firings.length<10) firings.push({n:n, life:1});
+        if(depth>2 || pulses.length>=14) return;
+        var nb=neighbors(n);
+        if(!nb.length) return;
+        // send the spike down a few random synapses; some may cascade further
+        var sendCount=Math.min(nb.length, (Math.random()<0.5)?1:2);
+        for(var k=0;k<sendCount;k++){
+            var t=nb[(Math.random()*nb.length)|0];
+            pulses.push({a:n, b:t, t:0, sp:rand(0.014,0.026), depth:depth});
+        }
     }
 
     function frame(){
@@ -443,40 +497,94 @@ var y=document.getElementById("year"); if(y){ y.textContent=(new Date()).getFull
                 if(n.y< -20) n.y=H+20; else if(n.y>H+20) n.y=-20;
             }
         }
-        // synapses (links)
+        // dendritic arbors — every neuron's own branching tree, batched into
+        // one path (cheap regardless of segment count)
+        ctx.strokeStyle="rgba("+ACC+",0.15)";
+        ctx.lineWidth=1;
+        ctx.beginPath();
+        for(i=0;i<nodes.length;i++){
+            var mm=nodes[i], segs=mm.dendrites;
+            for(var s=0;s<segs.length;s++){
+                var sg=segs[s];
+                ctx.moveTo(mm.x+sg.x1, mm.y+sg.y1);
+                ctx.lineTo(mm.x+sg.x2, mm.y+sg.y2);
+            }
+        }
+        ctx.stroke();
+        // axons — curved shafts between neighboring somas, fraying into a
+        // couple of terminal twigs where they reach the receiving neuron
         for(i=0;i<nodes.length;i++){
             for(j=i+1;j<nodes.length;j++){
                 var a=nodes[i], b=nodes[j];
                 var dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
                 if(d<linkDist){
-                    ctx.strokeStyle="rgba("+ACC+","+((1-d/linkDist)*0.15).toFixed(3)+")";
+                    var c=ctrlPoint(a,b,d);
+                    ctx.strokeStyle="rgba("+ACC+","+((1-d/linkDist)*0.14).toFixed(3)+")";
                     ctx.lineWidth=1;
-                    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo(c.x,c.y,b.x,b.y);
+                    var end=quadPoint(a,c,b,0.97), near=quadPoint(a,c,b,0.86);
+                    var tx=end.x-near.x, ty=end.y-near.y, tl=Math.hypot(tx,ty)||1;
+                    tx/=tl; ty/=tl;
+                    var nx=-ty, ny=tx;
+                    ctx.moveTo(end.x,end.y); ctx.lineTo(end.x+tx*7+nx*6, end.y+ty*7+ny*6);
+                    ctx.moveTo(end.x,end.y); ctx.lineTo(end.x+tx*7-nx*6, end.y+ty*7-ny*6);
+                    ctx.stroke();
                 }
             }
         }
-        // neurons
-        ctx.fillStyle="rgba("+ACC+",0.24)";
+        // somas — charge visibly toward threshold, then spike
         for(i=0;i<nodes.length;i++){
             var m=nodes[i];
-            ctx.beginPath(); ctx.arc(m.x,m.y,m.r,0,6.2832); ctx.fill();
-        }
-        // synaptic pulses firing along connections
-        if(!reduce){
-            if(pulses.length < 4 && Math.random()<0.025){
-                var src=nodes[(Math.random()*nodes.length)|0];
-                var nb=neighbors(src);
-                if(nb.length){ pulses.push({a:src, b:nb[(Math.random()*nb.length)|0], t:0, sp:rand(0.006,0.013)}); }
+            if(!reduce){
+                if(m.refr>0){ m.refr--; }
+                else{
+                    m.pot+=m.rate;
+                    if(m.pot>=1 || Math.random()<0.0009) fire(m, 0);
+                }
             }
+            var glow=Math.min(1,m.pot);
+            var rr=m.r*(1+glow*0.7);
+            ctx.fillStyle="rgba("+ACC+","+(0.22+glow*0.34).toFixed(3)+")";
+            ctx.beginPath(); ctx.arc(m.x,m.y,rr,0,6.2832); ctx.fill();
+            ctx.strokeStyle="rgba("+ACC+","+(0.3+glow*0.3).toFixed(3)+")";
+            ctx.lineWidth=1;
+            ctx.beginPath(); ctx.arc(m.x,m.y,rr,0,6.2832); ctx.stroke();
+        }
+        // firing flashes — bright soma glow that quickly decays
+        for(i=firings.length-1;i>=0;i--){
+            var f=firings[i]; f.life-=0.055;
+            if(f.life<=0){ firings.splice(i,1); continue; }
+            var fr=f.n.r+f.life*9;
+            var g0=ctx.createRadialGradient(f.n.x,f.n.y,0,f.n.x,f.n.y,fr);
+            g0.addColorStop(0,"rgba("+FIRE+","+(f.life*0.85).toFixed(3)+")");
+            g0.addColorStop(1,"rgba("+FIRE+",0)");
+            ctx.fillStyle=g0;
+            ctx.beginPath(); ctx.arc(f.n.x,f.n.y,fr,0,6.2832); ctx.fill();
+        }
+        // action potentials travelling along synapses, with a fading tail
+        if(!reduce){
             for(i=pulses.length-1;i>=0;i--){
                 var p=pulses[i]; p.t+=p.sp;
-                if(p.t>=1){ pulses.splice(i,1); continue; }
-                var px=p.a.x+(p.b.x-p.a.x)*p.t, py=p.a.y+(p.b.y-p.a.y)*p.t;
-                var g=ctx.createRadialGradient(px,py,0,px,py,7);
-                g.addColorStop(0,"rgba("+ACC+",0.55)");
-                g.addColorStop(1,"rgba("+ACC+",0)");
-                ctx.fillStyle=g;
-                ctx.beginPath(); ctx.arc(px,py,7,0,6.2832); ctx.fill();
+                if(p.t>=1){
+                    // arrived — may trigger the downstream neuron to spike too
+                    if(p.b.refr<=0 && Math.random()<0.55) fire(p.b, (p.depth||0)+1);
+                    pulses.splice(i,1); continue;
+                }
+                var d2=Math.hypot(p.a.x-p.b.x,p.a.y-p.b.y);
+                var ctrl=ctrlPoint(p.a,p.b,d2);
+                var tail=[0,-0.05,-0.1];
+                for(var s=0;s<tail.length;s++){
+                    var tt=p.t+tail[s]; if(tt<0) continue;
+                    var pt=quadPoint(p.a,ctrl,p.b,tt);
+                    var rad=s===0?6.5:4;
+                    var alpha=(s===0?0.8:0.8*(1-s/tail.length)*0.6);
+                    var g=ctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,rad);
+                    g.addColorStop(0,"rgba("+FIRE+","+alpha.toFixed(3)+")");
+                    g.addColorStop(1,"rgba("+FIRE+",0)");
+                    ctx.fillStyle=g;
+                    ctx.beginPath(); ctx.arc(pt.x,pt.y,rad,0,6.2832); ctx.fill();
+                }
             }
         }
     }
